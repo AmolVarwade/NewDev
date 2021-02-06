@@ -1,5 +1,8 @@
 node('master') {
 	stage ('checkout code'){
+		git 'https://github.com/AmolVarwade/CICD_Project/'
+	}
+	stage ('checkout code'){
 		checkout scm
 	}
 	
@@ -20,14 +23,14 @@ node('master') {
 	}
 	
 	stage ('Deployment'){
-		//sh 'cp target/*.war /opt/tomcat8/webapps'
+		deploy adapters: [tomcat8(credentialsId: 'tomcatcred', path: '', url: 'http://localhost:80')], contextPath: 'simplilearn', war: 'target/*.war'
 	}
 	stage ('Notification'){
 		//slackSend color: 'good', message: 'Deployment Sucessful'
 		emailext (
 		      subject: "Job Completed",
 		      body: "Jenkins Pipeline Job for Maven Build got completed !!!",
-		      to: "anuj_sharma401@yahoo.com"
+		      to: "amolv105@gmail.com"
 		    )
 	}
 }
